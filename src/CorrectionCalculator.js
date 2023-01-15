@@ -27,19 +27,33 @@ export default function CorrectionCalculator(props) {
     }
   };
 
+  const handleClear = (e) => {
+    baselineRef.current.value = null;
+    correctionFactorRef.current.value = null;
+    bloodSugarRef.current.value = null;
+
+    setResult(null);
+
+    if(props.resultCallback)
+    {
+      props.resultCallback(null);
+    }
+  };
+
   return (
     <div>
       <div>Units: {result}</div>
       <label>
-        Baseline: <input ref={baselineRef} type="text" />
+        Target: <input ref={baselineRef} type="text" value={props.baseline} />
       </label>
       <label>
-        Correction Factor: <input ref={correctionFactorRef} type="text" />
+        Correction Factor: <input ref={correctionFactorRef} type="text" value={props.correctionFactor} />
       </label>
       <label>
         Blood Sugar: <input ref={bloodSugarRef} type="text" />
       </label>
       <button onClick={handleCalculate}>Calculate</button>
+      <button onClick={handleClear}>Clear</button>
     </div>
   );
 }

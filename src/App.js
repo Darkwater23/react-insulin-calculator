@@ -1,86 +1,43 @@
-import Decimal from "decimal.js";
-import React, { useState } from "react";
-import BolusCalculator from "./BolusCalculator";
-import CorrectionCalculator from "./CorrectionCalculator";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+
+import InsulinCalculator from "./InsulinCalculator";
 
 export default function App() {
+  return (
+    <Router>
+      <div>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Calculators</Link>
+            </li>
+            <li>
+              <Link to="/about">About</Link>
+            </li>
+          </ul>
+        </nav>
 
-    const [correctionInsulinUnits, setCorrectionInsulinUnits] = useState(new Decimal(0));
-    const [bolusInsulinUnits, setBolusInsulinUnits] = useState(new Decimal(0));
+        {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+        <Routes>
+            <Route path='/about' element={<About/>} />
+            <Route path='/' element={<Home/>} />
+        </Routes>
+      </div>
+    </Router>
+  );
+}
 
-    function correctionCalculatorResultCallback(result) // expecting a string representing a number
-    {
-        if(result)
-        {
-            setCorrectionInsulinUnits(new Decimal(result));
-        }
-        else
-        {
-            setCorrectionInsulinUnits(new Decimal(0));
-        }
-    }
+function Home() {
+  return <InsulinCalculator baseline='120' correctionFactor='50' carbRatio='10' />;
+}
 
-    function bolusCalculatorResultCallback(result) // expecting a string representing a number
-    {
-        if(result)
-        {
-            setBolusInsulinUnits(new Decimal(result));
-        }
-        else
-        {
-            setBolusInsulinUnits(new Decimal(0));
-        }
-    }
-
-    function roundInsulinWholeUnits(correctionInsulinUnits, bolusInsulinUnits) // expecting a decimal objects
-  {
-      if(!correctionInsulinUnits) return new Decimal(0).toFixed(0);
-      if(!bolusInsulinUnits) return new Decimal(0).toFixed(0);
-
-      return correctionInsulinUnits.plus(bolusInsulinUnits).round().toFixed(0);
-  }
-
-  function roundInsulinHalfUnits(correctionInsulinUnits, bolusInsulinUnits) // expecting a decimal objects
-  {
-    if(!correctionInsulinUnits) return new Decimal(0).toFixed(1);
-    if(!bolusInsulinUnits) return new Decimal(0).toFixed(1);
-
-    const roundDown = ['1','2','3'];
-    const roundMid = ['4','5','6','7'];
-    const roundUp = ['8','9'];
-
-    var totalInsulinUnits = correctionInsulinUnits.plus(bolusInsulinUnits).toFixed(2);
-
-    var decimalPosition = totalInsulinUnits.indexOf(".");
-
-    var tenthPlaceDigit = totalInsulinUnits.substring(decimalPosition + 1, decimalPosition + 2);
-
-    var result = new Decimal(0).toFixed(1);
-
-    if(roundDown.includes(tenthPlaceDigit))
-    {
-        result = new Decimal(totalInsulinUnits).floor().toFixed(1);
-    }
-
-    if(roundMid.includes(tenthPlaceDigit))
-    {
-        result = new Decimal(totalInsulinUnits).floor().plus('0.5').toFixed(1);
-    }
-
-    if(roundUp.includes(tenthPlaceDigit))
-    {
-        result = new Decimal(totalInsulinUnits).ceil().toFixed(1);
-    }
-
-    return result;
-  }
-
-    return (
-        <>
-            <div>Whole Units: {roundInsulinWholeUnits(correctionInsulinUnits, bolusInsulinUnits)}</div>
-            <div>Half Units: {roundInsulinHalfUnits(correctionInsulinUnits, bolusInsulinUnits)}</div>
-            <CorrectionCalculator resultCallback={correctionCalculatorResultCallback} />
-            <BolusCalculator resultCallback={bolusCalculatorResultCallback} />
-        </>
-    );
+function About() {
+  return <>
+        <h2>About</h2>
+        <p>My original insulin calculator app was created when my daughter, Angel, was diagnosed with type 1 diabetes. I had that app side-loaded on my Android phone and used it to calculate the insulin she needed until she upgraded to a PDM and pump. The original app was HTML, CSS, and vanilla Javascript in an Android webview.</p>
+        <p>This version was built using ReactJS as a learning exercise. The decimal.js library was used to make sure the math comes out as expected (floating-point math vs decimal math). The formulas were extracted from documentation provided by NationwideChildrens.org. (<a href="https://www.nationwidechildrens.org/family-resources-education/health-wellness-and-safety-resources/resources-for-parents-and-kids/managing-your-diabetes/chapter-seven-calculating-bolus-injections" target="_blank">link</a>)</p>
+        <p>This app has not been verified by NationwideChildrens.org or any other medical professionals and should be used at your own risk.</p>
+    </>;
 }
