@@ -92,13 +92,11 @@ export default function InsulinCalculator(props) {
 
   return (
     <>
-      <div>
-        Whole Units:{" "}
-        {roundInsulinWholeUnits(correctionInsulinUnits, bolusInsulinUnits)}
+      <div className="output-container">
+        Whole Units: {roundInsulinWholeUnits(correctionInsulinUnits, bolusInsulinUnits)}
       </div>
-      <div>
-        Half Units:{" "}
-        {roundInsulinHalfUnits(correctionInsulinUnits, bolusInsulinUnits)}
+      <div className="output-container">
+        Half Units: {roundInsulinHalfUnits(correctionInsulinUnits, bolusInsulinUnits)}
       </div>
       <label>
         Target: <input ref={baselineRef} type="text" defaultValue={props.baseline} />
