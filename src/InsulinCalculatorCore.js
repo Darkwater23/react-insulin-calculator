@@ -2,8 +2,8 @@ import Decimal from "decimal.js";
 
 export function calculateBolus(carbRatio, mealCarbs) { // expect strings here
     
-    if(!carbRatio) return null;
-    if(!mealCarbs) return null;
+    if(!carbRatio || isNaN(carbRatio)) return null;
+    if(!mealCarbs || isNaN(mealCarbs)) return null;
     
     const carbRatioDecimal = new Decimal(carbRatio);
     const mealCarbsDecimal = new Decimal(mealCarbs);
@@ -19,9 +19,9 @@ export function calculateBolus(carbRatio, mealCarbs) { // expect strings here
 
 export function calculateCorrection(baseline, correctionFactor, bloodGlucose)
 {
-    if(!baseline) return null;
-    if(!correctionFactor) return null;
-    if(!bloodGlucose) return null;
+    if(!baseline || isNaN(baseline)) return null;
+    if(!correctionFactor || isNaN(correctionFactor)) return null;
+    if(!bloodGlucose || isNaN(bloodGlucose)) return null;
 
     const baselineDecimal = new Decimal(baseline);
     const correctionFactorDecimal = new Decimal(correctionFactor);
