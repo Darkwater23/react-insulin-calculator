@@ -93,11 +93,13 @@ export default function InsulinCalculator(props) {
   return (
     <>
       <div className="output-container">
-        Whole Units: {roundInsulinWholeUnits(correctionInsulinUnits, bolusInsulinUnits)}
+        Whole Units<br/>{roundInsulinWholeUnits(correctionInsulinUnits, bolusInsulinUnits)}
       </div>
       <div className="output-container">
-        Half Units: {roundInsulinHalfUnits(correctionInsulinUnits, bolusInsulinUnits)}
+        Half Units<br/>{roundInsulinHalfUnits(correctionInsulinUnits, bolusInsulinUnits)}
       </div>
+      <div className="clear">&nbsp;</div>
+      <hr />
       <label>
         Target: <input ref={baselineRef} type="text" defaultValue={props.baseline} />
       </label>
@@ -121,12 +123,12 @@ export default function InsulinCalculator(props) {
         </div>
         <div>
           <button role="button" onClick={handleClear}>
-            Clear
+            Reset
           </button>
         </div>
       </div>
       <fieldset>
-        <legend>Notes:</legend>
+        <legend><strong>Notes</strong></legend>
         <ul>
           <li>These calculators are for rapid-acting insulin.</li>
           <li>

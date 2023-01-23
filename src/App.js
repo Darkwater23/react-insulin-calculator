@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 import InsulinCalculator from "./InsulinCalculator";
+import InsulinCalculatorPresets from "./InsulinCalculatorPresets";
 
 export default function App() {
   return (
@@ -33,10 +34,13 @@ export default function App() {
   );
 }
 
+const [baselinePreset, setBaselinePreset] = useState()
+
 function Home() {
-  return <>
+  return <div className="container">
+          <InsulinCalculatorPresets prefixChangeCallback={handledPrefixChange} />
           <InsulinCalculator baseline='120' correctionFactor='50' carbRatio='10' />
-        </>;
+        </div>;
 }
 
 function About() {
