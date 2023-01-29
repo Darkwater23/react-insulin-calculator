@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 import InsulinCalculator from "./InsulinCalculator";
 import InsulinCalculatorPresets from "./InsulinCalculatorPresets";
+import InsulinCalculatorPresetsManager from "./InsulinCalculatorPresetsManager";
+
+const LOCAL_STORAGE_DATA_KEY = 'Insulin-Calculator-Presets'
 
 export default function App() {
   return (
@@ -12,6 +15,9 @@ export default function App() {
           <ul>
             <li>
               <Link to="/">Calculator</Link>
+            </li>
+            <li>
+              <Link to="/presets">Presets</Link>
             </li>
             <li>
               <Link to="/about">About</Link>
@@ -27,6 +33,7 @@ export default function App() {
         <Routes>
           <Route path='/privacy' element={<Privacy/>} />
             <Route path='/about' element={<About/>} />
+            <Route path='/presets' element={<Presets/>} />
             <Route path='/' element={<Home/>} />
         </Routes>
       </div>
@@ -34,13 +41,31 @@ export default function App() {
   );
 }
 
-const [baselinePreset, setBaselinePreset] = useState()
-
 function Home() {
+
+  const [baselinePreset, setBaselinePreset] = useState()
+  const [correctionFactorPreset, setCorrectionFactorPreset] = useState()
+  const [carbRatio, setCarbRatio] = useState()
+  
+  const handledPrefixChange = (preset) => {
+
+    console.log('Component event fired up to App')
+    setBaselinePreset(preset.baseline)
+    setCorrectionFactorPreset(preset.correctionFactor)
+    setCarbRatio(preset.carbRatio)
+  }
+
   return <div className="container">
-          <InsulinCalculatorPresets prefixChangeCallback={handledPrefixChange} />
-          <InsulinCalculator baseline='120' correctionFactor='50' carbRatio='10' />
+          <InsulinCalculatorPresets prefixChangeCallback={handledPrefixChange} key={LOCAL_STORAGE_DATA_KEY} />
+          <InsulinCalculator baseline={baselinePreset} correctionFactor={correctionFactorPreset} carbRatio={carbRatio} />
         </div>;
+}
+
+function Presets()
+{
+  return <>
+    <InsulinCalculatorPresetsManager key={LOCAL_STORAGE_DATA_KEY} />
+  </>
 }
 
 function About() {

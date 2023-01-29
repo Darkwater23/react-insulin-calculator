@@ -130,7 +130,7 @@ export default function InsulinCalculator(props) {
       <fieldset>
         <legend><strong>Notes</strong></legend>
         <ul>
-          <li>These calculators are for rapid-acting insulin.</li>
+          <li>This calculator is for rapid-acting insulin.</li>
           <li>
             Create presets to quickly change your correction target, correction
             factor, and carb ratio for meals, nighttime, etc.
