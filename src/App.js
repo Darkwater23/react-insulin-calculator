@@ -56,7 +56,7 @@ function Home() {
   }
 
   return <div className="container">
-          <InsulinCalculatorPresets prefixChangeCallback={handledPrefixChange} key={LOCAL_STORAGE_DATA_KEY} />
+          <InsulinCalculatorPresets prefixChangeCallback={handledPrefixChange} localStorageKey={LOCAL_STORAGE_DATA_KEY} />
           <InsulinCalculator baseline={baselinePreset} correctionFactor={correctionFactorPreset} carbRatio={carbRatio} />
         </div>;
 }
@@ -64,7 +64,7 @@ function Home() {
 function Presets()
 {
   return <>
-    <InsulinCalculatorPresetsManager key={LOCAL_STORAGE_DATA_KEY} />
+    <InsulinCalculatorPresetsManager localStorageKey={LOCAL_STORAGE_DATA_KEY} />
   </>
 }
 
