@@ -4,12 +4,12 @@ export default function InsulinCalculatorPresetsManager(props) {
     
     const localStorageKey = props.localStorageKey;
 
-    const prefixNameRef = useRef();
+    const presetNameRef = useRef();
     const baselineRef = useRef();
     const correctionFactorRef = useRef();
     const carbRatioRef = useRef();
 
-    const [prefixes, setPrefixes] = useState(new Array())
+    const [presets, setPresets] = useState(new Array())
 
     useEffect(() => {
         
@@ -21,44 +21,51 @@ export default function InsulinCalculatorPresetsManager(props) {
         {
             const data = JSON.parse(dataString);
 
-            setPrefixes(data);
+            setPresets(data);
         }
         
     }, [])
 
     useEffect(() => {
-        localStorage.setItem(localStorageKey, JSON.stringify(prefixes));
-      }, [prefixes]);
+        localStorage.setItem(localStorageKey, JSON.stringify(presets));
+      }, [presets]);
 
     const handleAddClick = (e) => {
-        let newPrefix = {
-            name: prefixNameRef.current.value,
+        let newPreset = {
+            name: presetNameRef.current.value,
             baseline: baselineRef.current.value,
             correctionFactor: correctionFactorRef.current.value,
             carbRatio: carbRatioRef.current.value
         }
 
         //TODO: prevent duplicate names
+        if(!presets.find(p => p.name === newPreset.name))
+        {
+            // Add preset to state
+            setPresets([...presets, newPreset])
 
-        // Add prefix to state
-        setPrefixes([...prefixes, newPrefix])
+            // Clear inputs
+            presetNameRef.current.value = null;
+            baselineRef.current.value = null;
+            correctionFactorRef.current.value = null;
+            carbRatioRef.current.value = null;
 
-        // Clear inputs, set focus
-        prefixNameRef.value = null;
-        baselineRef.value = null;
-        correctionFactorRef.value = null;
-        carbRatioRef.value = null;
+            // Set focus
+            presetNameRef.current.focus();
+        }
     }
 
     const handlePresetDelete = (presetName) => {
         
+        console.log(presetName)
+        
         let data = JSON.parse(localStorage.getItem(localStorageKey))
 
-        let newData = data.map(p => p.name !== presetName)
+        let newData = data.filter(p => p.name !== presetName)
 
         console.log(newData)
 
-        setPrefixes(newData)
+        setPresets(newData)
 
         localStorage.setItem(localStorageKey, JSON.stringify(newData))
     }
@@ -68,7 +75,7 @@ export default function InsulinCalculatorPresetsManager(props) {
         <table>
             <thead>
                 <tr>
-                    <th>Prefix Name</th>
+                    <th>Preset Name</th>
                     <th>Baseline</th>
                     <th>Correction Factor</th>
                     <th>Carb Ratio</th>
@@ -77,19 +84,19 @@ export default function InsulinCalculatorPresetsManager(props) {
             </thead>
             <tbody>
                 <tr>
-                    <td><input type="text" ref={prefixNameRef} /></td>
+                    <td><input type="text" ref={presetNameRef} /></td>
                     <td><input type="text" ref={baselineRef} /></td>
                     <td><input type="text" ref={correctionFactorRef} /></td>
                     <td><input type="text" ref={carbRatioRef} /></td>
                     <td><button onClick={handleAddClick}>Add</button></td>
                 </tr>
-        {prefixes.map(function(prefix){
-                    return <tr key={prefix.name}>
-                            <td>{prefix.name}</td>
-                            <td>{prefix.baseline}</td>
-                            <td>{prefix.correctionFactor}</td>
-                            <td>{prefix.carbRatio}</td>
-                            <td><button onClick={() => handlePresetDelete(prefix.name)}>Delete</button></td>
+        {presets.map(function(preset){
+                    return <tr key={preset.name}>
+                            <td>{preset.name}</td>
+                            <td>{preset.baseline}</td>
+                            <td>{preset.correctionFactor}</td>
+                            <td>{preset.carbRatio}</td>
+                            <td><button onClick={() => handlePresetDelete(preset.name)}>Delete</button></td>
                         </tr>;
                   })}
             </tbody>

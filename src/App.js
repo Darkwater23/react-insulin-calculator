@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+
 import InsulinCalculator from "./InsulinCalculator";
 import InsulinCalculatorPresets from "./InsulinCalculatorPresets";
 import InsulinCalculatorPresetsManager from "./InsulinCalculatorPresetsManager";
@@ -47,7 +52,7 @@ function Home() {
   const [correctionFactorPreset, setCorrectionFactorPreset] = useState()
   const [carbRatio, setCarbRatio] = useState()
   
-  const handledPrefixChange = (preset) => {
+  const handledPresetChange = (preset) => {
 
     console.log('Component event fired up to App')
     setBaselinePreset(preset.baseline)
@@ -56,7 +61,7 @@ function Home() {
   }
 
   return <div className="container">
-          <InsulinCalculatorPresets prefixChangeCallback={handledPrefixChange} localStorageKey={LOCAL_STORAGE_DATA_KEY} />
+          <InsulinCalculatorPresets presetChangeCallback={handledPresetChange} localStorageKey={LOCAL_STORAGE_DATA_KEY} />
           <InsulinCalculator baseline={baselinePreset} correctionFactor={correctionFactorPreset} carbRatio={carbRatio} />
         </div>;
 }
