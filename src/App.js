@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import CssBaseline from '@mui/material/CssBaseline'
 
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -15,6 +16,7 @@ const LOCAL_STORAGE_DATA_KEY = 'Insulin-Calculator-Presets'
 export default function App() {
   return (
     <Router>
+      <CssBaseline />
       <div>
         <nav>
           <ul>
@@ -52,7 +54,7 @@ function Home() {
   const [correctionFactorPreset, setCorrectionFactorPreset] = useState()
   const [carbRatio, setCarbRatio] = useState()
   
-  const handledPresetChange = (preset) => {
+  const handlePresetChange = (preset) => {
 
     console.log('Component event fired up to App')
     setBaselinePreset(preset.baseline)
@@ -61,7 +63,7 @@ function Home() {
   }
 
   return <div className="container">
-          <InsulinCalculatorPresets presetChangeCallback={handledPresetChange} localStorageKey={LOCAL_STORAGE_DATA_KEY} />
+          <InsulinCalculatorPresets presetChangeCallback={handlePresetChange} localStorageKey={LOCAL_STORAGE_DATA_KEY} />
           <InsulinCalculator baseline={baselinePreset} correctionFactor={correctionFactorPreset} carbRatio={carbRatio} />
         </div>;
 }

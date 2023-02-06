@@ -6,7 +6,7 @@ export default function InsulinCalculatorPresets(props) {
     const presetSelectRef = useRef();
 
     const localStorageKey = props.localStorageKey;
-    const notify = props.prefixChangeCallback;
+    const notify = props.presetChangeCallback;
 
     useEffect(() => {
         

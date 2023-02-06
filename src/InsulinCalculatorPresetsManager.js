@@ -1,4 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
+import Snackbar from '@mui/material/Snackbar'
+import Alert from '@mui/material/Alert'
 
 export default function InsulinCalculatorPresetsManager(props) {
     
@@ -10,6 +12,13 @@ export default function InsulinCalculatorPresetsManager(props) {
     const carbRatioRef = useRef();
 
     const [presets, setPresets] = useState(new Array())
+    const [snackBar, setSnackBar] = useState({
+        open: false,
+        vertical: 'top',
+        horizontal: 'center',
+    });
+    
+    const { vertical, horizontal } = snackBar;
 
     useEffect(() => {
         
@@ -38,20 +47,27 @@ export default function InsulinCalculatorPresetsManager(props) {
             carbRatio: carbRatioRef.current.value
         }
 
-        //TODO: prevent duplicate names
         if(!presets.find(p => p.name === newPreset.name))
         {
             // Add preset to state
             setPresets([...presets, newPreset])
 
             // Clear inputs
-            presetNameRef.current.value = null;
-            baselineRef.current.value = null;
-            correctionFactorRef.current.value = null;
-            carbRatioRef.current.value = null;
+            presetNameRef.current.value = null
+            baselineRef.current.value = null
+            correctionFactorRef.current.value = null
+            carbRatioRef.current.value = null
 
             // Set focus
-            presetNameRef.current.focus();
+            presetNameRef.current.focus()
+        }
+        else
+        {
+            setSnackBar({
+                open: true,
+                vertical: 'top',
+                horizontal: 'center',
+            })
         }
     }
 
@@ -69,9 +85,27 @@ export default function InsulinCalculatorPresetsManager(props) {
 
         localStorage.setItem(localStorageKey, JSON.stringify(newData))
     }
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setSnackBar({
+            open: false,
+            vertical: 'top',
+            horizontal: 'center',
+        })
+    }
   
     return (
     <div>
+        <Snackbar open={snackBar.open}
+            anchorOrigin={{ vertical, horizontal }}>
+                <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
+                    Preset names must be unique
+                </Alert>
+        </Snackbar>
         <table>
             <thead>
                 <tr>
